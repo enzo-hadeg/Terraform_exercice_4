@@ -1,0 +1,104 @@
+Vidéo Monsieur Seneina:
+
+Terraofrom est un outil permettant de faire de l'automatisation déploiement en étant indépendant des d'une infrastructure.
+
+Documentation complète en information sur l'installation.
+Plusieurs support sur les différent OS.
+
+https://developer.hashicorp.com/terraform/language/providers
+
+Providers officiel HashiCorp
+Partner (AWS,Vultr,Azure...)
+
+Faire une instance Vultr :
+https://registry.terraform.io/providers/vultr/vultr/latest/docs
+Qui est un partenaire, possède une interface graphique.
+
+#Précision du provider
+terraform {
+  required_providers {
+    vultr = {
+      source = "vultr/vultr"
+      version = "2.18.0"
+    }
+  }
+}
+
+# Configure the Vultr Provider, on précise l'api key, les limites qui sont spécifiques à vultr.
+provider "vultr" {
+  api_key = "VULTR_API_KEY"
+  rate_limit = 100
+  retry_limit = 3
+}
+
+# Create a web instance
+resource "vultr_instance" "web" {
+  # ...
+}
+
+
+
+Les arguments sont caractériser par l'argument et à quoi elle correspond 
+L'apikey est obligatoire
+Les rate et retry limit sont optionnel.
+
+Création de l'instance :
+
+resource "vultr_instance" "my_instance" {
+    plan = "vc2-1c-2gb" #type de ressource
+    region = "sea" #région
+    os_id = 1743 # l'os
+}
+
+https://registry.terraform.io/providers/vultr/vultr/latest/docs/resources/instance
+Sur ce lien on voit les arguments de reference 
+Plan et région sont les arguments obligatoire.
+
+On peut voir la liste de ce qui est dispo pour chaque argument
+
+Pour lancer le code:
+Terraform.exe init
+Permet d'inistailiser et télécharger le providers qu'on a besoin ici vultr.
+Terraform.exe plan
+Il va nous montrer ce qui est insérer via notre code avec ce que l'on renseigne.
+Terraform.exe apply
+Mets en place notre code déploiment pour faire notre instance.
+
+Pour vérifier la nomenclature de notre plan :
+https://www.vultr.com/api/#tag/plans/operation/list-plans
+On peut spécifier nos ressource sur la machine.
+
+plan = "vc2-1c-2gb"
+vc2 = type de ressource vultr ?
+1c = nombre de coeur du proc
+2gb = la ram
+
+En modifiant sur le fichier et en refaisant le terraform.exe apply permet de changer les ressources en direct sur la machines.
+La machine ne change pas son étatlors de ce processus ?
+
+Le fichier state permet de stocker l'historique de tout ce que l'on déploie.
+exemple: terraform.tfstate
+
+
+terraform grâce au fichier state va pouvoir voir les différence avec ce que l'on change, ajoute ou détruit.
+
+Si on veut ajouter l'addresse ip via un output : 
+output "ip" {
+    value = vultr_instance.my
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
